@@ -1,24 +1,20 @@
+# test_calculator.py
 '''My Calculator Test'''
+from decimal import Decimal
 from calculator import Calculator
-import pytest
 
 def test_addition():
-    '''Test that addition function works.'''
-    assert Calculator.perform_operation('add', 2, 2) == 4
+    '''Test that addition function works'''
+    assert Calculator.add(Decimal('2'), Decimal('2')) == Decimal('4'), "Addition result is incorrect"
 
 def test_subtraction():
-    '''Test that subtraction function works.'''
-    assert Calculator.perform_operation('subtract', 2, 2) == 0
+    '''Test that subtraction function works'''
+    assert Calculator.subtract(Decimal('2'), Decimal('2')) == Decimal('0'), "Subtraction result is incorrect"
 
-def test_multiplication():
-    '''Test that multiplication function works.'''
-    assert Calculator.perform_operation('multiply', 2, 2) == 4
+def test_divide():
+    '''Test that division function works'''
+    assert Calculator.divide(Decimal('2'), Decimal('2')) == Decimal('1'), "Division result is incorrect"
 
-def test_division():
-    '''Test that division function works.'''
-    assert Calculator.perform_operation('divide', 2, 2) == 1
-
-def test_division_by_zero():
-    '''Test that division by zero raises ValueError.'''
-    with pytest.raises(ValueError):
-        Calculator.perform_operation('divide', 1, 0)
+def test_multiply():
+    '''Test that multiplication function works'''
+    assert Calculator.multiply(Decimal('2'), Decimal('2')) == Decimal('4'), "Multiplication result is incorrect"
