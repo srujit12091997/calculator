@@ -1,20 +1,25 @@
-# test_calculator.py
-'''My Calculator Test'''
+"""Calculation Functionality Tests."""
+
 from decimal import Decimal
-from calculator import Calculator
+from calculator.calculation import Calculation
+from calculator.operations import add, subtract, multiply, divide
 
 def test_addition():
-    '''Test that addition function works'''
-    assert Calculator.add(Decimal('2'), Decimal('2')) == Decimal('4'), "Addition result is incorrect"
+    """Ensures the add method correctly computes the sum."""
+    calc = Calculation(Decimal('2'), Decimal('2'), add)
+    assert calc.perform() == Decimal('4'), "Addition Error"
 
 def test_subtraction():
-    '''Test that subtraction function works'''
-    assert Calculator.subtract(Decimal('2'), Decimal('2')) == Decimal('0'), "Subtraction result is incorrect"
+    """Verifies subtraction accuracy."""
+    calc = Calculation(Decimal('2'), Decimal('2'), subtract)
+    assert calc.perform() == Decimal('0'), "Subtraction Error"
 
-def test_divide():
-    '''Test that division function works'''
-    assert Calculator.divide(Decimal('2'), Decimal('2')) == Decimal('1'), "Division result is incorrect"
+def test_division():
+    """Confirms division method functionality."""
+    calc = Calculation(Decimal('2'), Decimal('2'), divide)
+    assert calc.perform() == Decimal('1'), "Division Error"
 
-def test_multiply():
-    '''Test that multiplication function works'''
-    assert Calculator.multiply(Decimal('2'), Decimal('2')) == Decimal('4'), "Multiplication result is incorrect"
+def test_multiplication():
+    """Tests multiplication to ensure proper operation."""
+    calc = Calculation(Decimal('2'), Decimal('2'), multiply)
+    assert calc.perform() == Decimal('4'), "Multiplication Error"

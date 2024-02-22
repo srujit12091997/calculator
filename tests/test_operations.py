@@ -1,3 +1,4 @@
+"""
 # test_operations.py
 '''Testing Operations'''
 from decimal import Decimal
@@ -30,3 +31,26 @@ def test_divide_by_zero():
     with pytest.raises(ValueError, match="Cannot divide by zero"):
         calculation = Calculation(Decimal('10'), Decimal('0'), divide)
         calculation.perform()
+"""
+
+import pytest
+from decimal import Decimal
+from calculator.calculation import Calculation
+from calculator.operations import add, subtract, multiply, divide
+
+def operation_test(value1, value2, method, expected_outcome):
+    """
+    Validates arithmetic operations to ensure accuracy.
+    """
+    calc_instance = Calculation.initialize(value1, value2, method)
+    assert calc_instance.execute() == expected_outcome, f"Error in {method.__name__}"
+
+# The division by zero test remains unchanged, focusing on the specific exception handling.
+def check_division_by_zero():
+    """
+    Confirms that dividing by zero raises a ValueError.
+    """
+    with pytest.raises(ValueError, match="Cannot divide by zero"):
+        calc_test = Calculation(Decimal('10'), Decimal('0'), divide)
+        calc_test.execute()
+

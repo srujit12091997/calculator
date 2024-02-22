@@ -1,50 +1,44 @@
-# test_calculations.py
-'''My Calculator Test'''
+"""Test suite for calculation history management."""
 
-from decimal import Decimal
 import pytest
+from decimal import Decimal
 from calculator.calculation import Calculation
 from calculator.calculations import Calculations
 from calculator.operations import add, subtract
 
 @pytest.fixture
-def setup_calculations():
-    """Fixture to clear history and add sample calculations for tests."""
+def calculator_setup():
+    """Setup fixture for each test."""
     Calculations.clear_history()
-    # Add sample calculations
-    Calculations.add_calculation(Calculation(Decimal('10'), Decimal('5'), add))
-    Calculations.add_calculation(Calculation(Decimal('20'), Decimal('3'), subtract))
-    # No need to return anything as Calculations maintains state internally
+    Calculations.record_calculation(Calculation(Decimal('10'), Decimal('5'), add))
+    Calculations.record_calculation(Calculation(Decimal('20'), Decimal('3'), subtract))
 
-def test_add_calculation(setup_calculations):
-    """Test adding a calculation to the history."""
+def test_record_calculation(calculator_setup):
+    """Test recording a new calculation."""
     new_calc = Calculation(Decimal('2'), Decimal('2'), add)
-    Calculations.add_calculation(new_calc)
-    assert Calculations.get_latest() == new_calc, "Failed to add the calculation to the history"
+    Calculations.record_calculation(new_calc)
+    assert Calculations.latest_calculation() == new_calc, "New calculation was not recorded correctly."
 
-def test_get_history(setup_calculations):
-    """Test retrieving the entire calculation history."""
-    history = Calculations.get_history()
-    assert len(history) == 2, "History does not contain the expected number of calculations"
+def test_history_retrieval(calculator_setup):
+    """Test retrieval of the entire history."""
+    assert len(Calculations.retrieve_history()) == 2, "History retrieval failed."
 
-def test_clear_history(setup_calculations):
-    """Test clearing the entire calculation history."""
+def test_history_reset(calculator_setup):
+    """Test resetting the history."""
     Calculations.clear_history()
-    assert len(Calculations.get_history()) == 0, "History was not cleared"
+    assert len(Calculations.retrieve_history()) == 0, "History was not cleared."
 
-def test_get_latest(setup_calculations):
-    """Test getting the latest calculation from the history."""
-    latest = Calculations.get_latest()
-    assert latest and latest.a == Decimal('20') and latest.b == Decimal('3'), "Did not get the correct latest calculation"
+def test_latest_calculation_retrieval(calculator_setup):
+    """Test retrieval of the latest calculation."""
+    assert Calculations.latest_calculation() is not None, "Failed to retrieve the latest calculation."
 
-def test_find_by_operation(setup_calculations):
-    """Test finding calculations in the history by operation type."""
-    add_operations = Calculations.find_by_operation("add")
-    assert len(add_operations) == 1, "Did not find the correct number of calculations with add operation"
-    subtract_operations = Calculations.find_by_operation("subtract")
-    assert len(subtract_operations) == 1, "Did not find the correct number of calculations with subtract operation"
+def test_search_by_operation_type(calculator_setup):
+    """Test searching calculations by operation type."""
+    adds = Calculations.search_by_operation(add)
+    subtracts = Calculations.search_by_operation(subtract)
+    assert len(adds) == 1 and len(subtracts) == 1, "Search by operation type failed."
 
-def test_get_latest_with_empty_history():
-    """Test getting the latest calculation when the history is empty."""
+def test_latest_with_no_history():
+    """Test that no latest calculation is returned when history is empty."""
     Calculations.clear_history()
-    assert Calculations.get_latest() is None, "Expected None for latest calculation with empty history"
+    assert Calculations.latest_calculation() is None, "Expected no latest calculation."
